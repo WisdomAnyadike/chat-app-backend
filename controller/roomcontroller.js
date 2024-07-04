@@ -37,7 +37,7 @@ const getRoomId = async (req, res) => {
             if (objWithID) {
                 res.status(200).send({ message: "room id gotten successfully", room_id: objWithID.room_id  , status: 'okay'})
             } else {
-                res.status(400).send({ message: "couldnt get room id"  , status: false})
+                res.status(200).send({ message: "couldnt get room id"  , status: 'notokay' , room_id : null})
             }
         } catch (error) {
             console.log('error while fetching roomid', error);
