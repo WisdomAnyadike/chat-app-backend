@@ -58,7 +58,7 @@ const login = async (req, res) => {
 
         } catch (error) {
             console.log('error while loggin in', error);
-            res.status(500).send({ message: "internal server error" })
+            res.status(500).send({ message: "internal server error"  , status: false})
         }
 
 

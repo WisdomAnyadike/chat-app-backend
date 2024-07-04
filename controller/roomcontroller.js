@@ -35,13 +35,13 @@ const getRoomId = async (req, res) => {
         try {
             const objWithID = await roomModel.findOne({ name, user_texted })
             if (objWithID) {
-                res.status(200).send({ message: "room id gotten successfully", room_id: objWithID.room_id })
+                res.status(200).send({ message: "room id gotten successfully", room_id: objWithID.room_id  , status: 'okay'})
             } else {
-                res.status(400).send({ message: "couldnt get room id" })
+                res.status(400).send({ message: "couldnt get room id"  , status: false})
             }
         } catch (error) {
             console.log('error while fetching roomid', error);
-            res.status(500).send({ message: "internal server error" })
+            res.status(500).send({ message: "internal server error"  , status: false })
         }
 
     }
