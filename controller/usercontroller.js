@@ -50,14 +50,15 @@ const login = async (req, res) => {
             if (!validateUser) {
                 res.status(400).send({ message: "user does not exist , try signing up" })
             } else {
-
                 const comparePassword = await bcrypt.compare(password, validateUser.password)
                 const secretKey = process.env.Jwt_SECRET
+
                 const token = JWT.sign({
                     username: validateUser.username,
                     email: validateUser.email,
                     userId: validateUser._id
                 }, secretKey, { expiresIn: '1d' })
+                
                 if (!comparePassword) {
                     res.status(400).send({ message: "password does not match", status: false })
                 } else {
