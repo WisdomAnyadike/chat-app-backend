@@ -47,13 +47,6 @@ const roomModel = require("../models/roomModel");
 const createChat = async ({ socket_id, name, user_id, user_texted, room_id }) => {
     try {
 
-        // const existingRoom = await roomModel.findOne({ room_id });
-        // if (!existingRoom) {
-        //     // Create a new room if it doesn't exist
-        //     await roomModel.create({ name, room_id });
-        // }
-
-        // Check if the user already exists in the room
         const existingUser = await chatModel.findOne({ socket_id, room_id, user_id });
         if (existingUser) {
             console.log('im here exist');
