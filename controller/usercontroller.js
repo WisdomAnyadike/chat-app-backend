@@ -123,15 +123,18 @@ const createProfile = async (req, res) => {
                 userId,
                 profileName
             })
+
             // Add new profile
+            if (profile) {
+                user.profiles.push(profile._id);
+                await user.save();
 
-            user.profiles.push({ profileName });
-            await user.save();
+                res.status(201).send({ message: 'Profile created successfully', profiles: user.profiles, status: 'okay' });
+            }
 
-            res.status(201).send({ message: 'Profile created successfully', profiles: user.profiles, status: 'okay' });
         } catch (error) {
             console.log(error);
-            res.status(500).send({ message: 'Server error' + error , status: false });
+            res.status(500).send({ message: 'Server error' + error, status: false });
         }
 
     }
