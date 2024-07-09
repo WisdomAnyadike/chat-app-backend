@@ -54,11 +54,14 @@ const login = async (req, res) => {
                 const secretKey = process.env.Jwt_SECRET
 
                 const token = JWT.sign({
-                    username: validateUser.username,
-                    email: validateUser.email,
-                    userId: validateUser._id
+                    user: {
+                        username: validateUser.username,
+                        email: validateUser.email,
+                        userId: validateUser._id
+                    }
+
                 }, secretKey, { expiresIn: '1d' })
-                
+
                 if (!comparePassword) {
                     res.status(400).send({ message: "password does not match", status: false })
                 } else {
