@@ -124,7 +124,8 @@ const createProfile = async (req, res) => {
 
             res.status(201).send({ message: 'Profile created successfully', profiles: user.profiles, status: 'okay' });
         } catch (error) {
-            res.status(500).send({ message: 'Server error', error, status: false });
+            console.log(error);
+            res.status(500).send({ message: 'Server error' + error , status: false });
         }
 
     }
