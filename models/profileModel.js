@@ -12,8 +12,7 @@ const profileSchema = new mongoose.Schema({
     },
     role: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'role',
-        required: true
+        ref: 'role'
     }
 });
 

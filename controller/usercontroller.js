@@ -2,6 +2,7 @@ const userModel = require("../models/userModel")
 const bcrypt = require('bcryptjs')
 const JWT = require('jsonwebtoken')
 const Dream = require("../models/dreamModel")
+const Profile = require("../models/profileModel")
 
 
 const signUp = async (req, res) => {
@@ -118,7 +119,12 @@ const createProfile = async (req, res) => {
                 return res.status(404).send({ message: 'User not found' });
             }
 
+            const profile = await Profile.create({
+                userId,
+                profileName
+            })
             // Add new profile
+
             user.profiles.push({ profileName });
             await user.save();
 
