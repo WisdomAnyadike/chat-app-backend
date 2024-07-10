@@ -8,7 +8,8 @@ const profileSchema = new mongoose.Schema({
     },
     profileName: {
         type: String,
-        required: true
+        required: true,
+        unique:true
     },
     role: {
         type: mongoose.Schema.Types.ObjectId,

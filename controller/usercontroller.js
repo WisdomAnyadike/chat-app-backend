@@ -119,18 +119,27 @@ const createProfile = async (req, res) => {
                 return res.status(404).send({ message: 'User not found' });
             }
 
-            const profile = await Profile.create({
-                userId,
-                profileName
-            })
+            const verifyProfile = await Profile.findOne({ profileName })
 
-            // Add new profile
-            if (profile) {
-                user.profiles.push(profile._id);
-                await user.save();
+            if (!verifyProfile) {
+                const profile = await Profile.create({
+                    userId,
+                    profileName
+                })
 
-                res.status(201).send({ message: 'Profile created successfully', profiles: user.profiles, status: 'okay' });
+                // Add new profile
+                if (profile) {
+                    user.profiles.push(profile._id);
+                    await user.save();
+
+                    res.status(201).send({ message: 'Profile created successfully', profiles: user.profiles, status: 'okay' });
+                }
+            } else {
+                res.status(400).send({ message: 'profile already exists' });
+
             }
+
+
 
         } catch (error) {
             console.log(error);
@@ -287,6 +296,11 @@ const deleteUser = async (req, res) => {
         res.status(500).send({ message: 'Server error', error });
     }
 };
+
+
+const getProfile = async (req, res) => {
+
+}
 
 
 
