@@ -310,7 +310,7 @@ const getFirstProfile = async (req, res) => {
         if (!profiles) {
             res.status(400).send({ message: 'couldnt get profile', status: false });
         } else {
-            res.status(400).send({ message: 'couldnt get profile', status: 'okay', profileId: profiles[0]._id });
+            res.status(200).send({ message: 'couldnt get profile', status: 'okay', profileId: profiles[0]._id });
         }
     } catch (error) {
         res.status(500).send({ message: 'Server error', error });
