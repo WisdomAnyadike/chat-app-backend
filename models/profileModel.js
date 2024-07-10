@@ -14,7 +14,6 @@ const profileSchema = new mongoose.Schema({
     role: {
         roleName: {
             type: String,
-            required: true,
             enum: ['Concept Innovator', 'Frontend Developer', 'Backend Developer', 'Product Manager', 'UI/UX Designer', 'Data Scientist', 'QA Engineer', 'Marketing Specialist']
         },
         dreamId: {
