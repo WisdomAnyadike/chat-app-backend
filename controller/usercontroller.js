@@ -144,46 +144,69 @@ const createProfile = async (req, res) => {
 
 
 const addRoleToProfile = async (req, res) => {
-    try {
-        const { userId, profileId } = req.params;
-        const { roleName, dreamId } = req.body;
+    const { profileId } = req.params;
+    const { userId } = req.user
+    const { roleName, dreamId, dreamName, description, } = req.body;
 
-        // Find user
-        const user = await userModel.findById(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+    if (!profileId) {
+        res.status(400).send({ message: 'profile id is mandatory' })
+    } else if (!userId) {
+        res.status(400).send({ message: 'authentication not provided' })
+    } else if (!roleName) {
+        res.status(400).send({ message: 'rolename is mandatory' })
+    } else if (roleName === 'Concept Innovator' && (!dreamName || !description)) {
+        res.status(400).send({ message: 'Innovator role requires dreamname & description' })
+    } else if (roleName !== 'Concept Innovator' && !dreamId) {
+        res.status(400).send({ message: 'Non-Innovator role requires dreamId' })
+    } else {
+
+        try {
+            // Find user
+            const user = await userModel.findById(userId);
+            if (!user) {
+                return res.status(404).send({ message: 'User not found' });
+            }
+
+            // Find profile
+            const profile = user.profiles.id(profileId);
+            if (!profile) {
+                return res.status(404).send({ message: 'Profile not found' });
+            }
+
+
+            let newDreamId = dreamId;
+
+            // Create dream if the role is Concept Innovator
+            if (roleName === 'Concept Innovator') {
+                const newDream = await Dream.create({
+                    dreamName,
+                    description,
+                    createdBy: userId
+                });
+                if (newDream) {
+                    newDreamId = newDream._id;
+                } else {
+                    res.status(400).send({ message: 'couldnt create new dream' })
+                }
+
+            }
+
+            // Add role to profile
+            if (newDreamId) {
+                profile.roles.push({ roleName, dreamId: newDreamId });
+                await user.save();
+            }
+
+
+            res.status(201).send({ message: 'Role added successfully', profile });
+        } catch (error) {
+            res.status(500).send({ message: 'Server error', error });
         }
 
-        // Find profile
-        const profile = user.profiles.id(profileId);
-        if (!profile) {
-            return res.status(404).json({ message: 'Profile not found' });
-        }
 
 
-        let newDreamId = dreamId;
-
-        // Create dream if the role is Concept Innovator
-        if (roleName === 'Concept Innovator') {
-            const newDream = await Dream.create({
-                dreamName,
-                description,
-                createdBy: userId
-            });
-            newDreamId = newDream._id;
-        }
-
-        // Add role to profile
-        if (newDreamId) {
-            profile.roles.push({ roleName, dreamId: newDreamId });
-            await user.save();
-        }
-
-
-        res.status(201).json({ message: 'Role added successfully', profile });
-    } catch (error) {
-        res.status(500).json({ message: 'Server error', error });
     }
+
 };
 
 const removeRoleFromProfile = async (req, res) => {
@@ -193,22 +216,22 @@ const removeRoleFromProfile = async (req, res) => {
         // Find user
         const user = await userModel.findById(userId);
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).send({ message: 'User not found' });
         }
 
         // Find profile
         const profile = user.profiles.id(profileId);
         if (!profile) {
-            return res.status(404).json({ message: 'Profile not found' });
+            return res.status(404).send({ message: 'Profile not found' });
         }
 
         // Remove role from profile
         profile.roles.id(roleId).remove();
         await user.save();
 
-        res.status(200).json({ message: 'Role removed successfully', profile });
+        res.status(200).send({ message: 'Role removed successfully', profile });
     } catch (error) {
-        res.status(500).json({ message: 'Server error', error });
+        res.status(500).send({ message: 'Server error', error });
     }
 };
 
@@ -219,12 +242,12 @@ const getUserDetails = async (req, res) => {
         // Find user
         const user = await userModel.findById(userId);
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).send({ message: 'User not found' });
         }
 
-        res.status(200).json({ user });
+        res.status(200).send({ user });
     } catch (error) {
-        res.status(500).json({ message: 'Server error', error });
+        res.status(500).send({ message: 'Server error', error });
     }
 };
 
@@ -236,7 +259,7 @@ const updateUserInformation = async (req, res) => {
         // Find user
         const user = await userModel.findById(userId);
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).send({ message: 'User not found' });
         }
 
         // Update user information
@@ -246,9 +269,9 @@ const updateUserInformation = async (req, res) => {
 
         await user.save();
 
-        res.status(200).json({ message: 'User updated successfully', user });
+        res.status(200).send({ message: 'User updated successfully', user });
     } catch (error) {
-        res.status(500).json({ message: 'Server error', error });
+        res.status(500).send({ message: 'Server error', error });
     }
 };
 
@@ -259,9 +282,9 @@ const deleteUser = async (req, res) => {
         // Find and delete user
         await User.findByIdAndDelete(userId);
 
-        res.status(200).json({ message: 'User deleted successfully' });
+        res.status(200).send({ message: 'User deleted successfully' });
     } catch (error) {
-        res.status(500).json({ message: 'Server error', error });
+        res.status(500).send({ message: 'Server error', error });
     }
 };
 
