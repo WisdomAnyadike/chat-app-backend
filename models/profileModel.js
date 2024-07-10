@@ -12,10 +12,24 @@ const profileSchema = new mongoose.Schema({
         unique:true
     },
     role: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'role'
+        roleName: {
+            type: String,
+            required: true,
+            enum: ['Concept Innovator', 'Frontend Developer', 'Backend Developer', 'Product Manager', 'UI/UX Designer', 'Data Scientist', 'QA Engineer', 'Marketing Specialist']
+        },
+        dreamId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Dream'
+        }
     }
 });
+
+
+
+const Profile = mongoose.model('Profile', profileSchema);
+module.exports = Profile;
+
+
 
 // function rolesLimit(val) {
 //     const roleCount = val.reduce((acc, role) => {
@@ -24,6 +38,3 @@ const profileSchema = new mongoose.Schema({
 //     }, {});
 //     return !Object.values(roleCount).some(count => count > 2);
 // }
-
-const Profile = mongoose.model('Profile', profileSchema);
-module.exports = Profile;

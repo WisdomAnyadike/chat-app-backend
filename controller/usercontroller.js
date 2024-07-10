@@ -177,7 +177,7 @@ const addRoleToProfile = async (req, res) => {
             }
 
             // Find profile
-            const profile = user.profiles.id(profileId);
+            const profile = await Profile.findById(profileId);
             if (!profile) {
                 return res.status(404).send({ message: 'Profile not found' });
             }
@@ -202,7 +202,7 @@ const addRoleToProfile = async (req, res) => {
 
             // Add role to profile
             if (newDreamId) {
-                profile.roles.push({ roleName, dreamId: newDreamId });
+                profile.role = { roleName, dreamId: newDreamId };
                 await user.save();
             }
 
