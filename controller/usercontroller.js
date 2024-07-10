@@ -298,7 +298,23 @@ const deleteUser = async (req, res) => {
 };
 
 
-const getProfile = async (req, res) => {
+const getFirstProfile = async (req, res) => {
+    const { userId } = req.user
+    try {
+        const user = await userModel.findById(userId);
+        if (!user) {
+            return res.status(404).send({ message: 'User not found' });
+        }
+
+        const profiles = await Profile.find({ userId })
+        if (!profiles) {
+            res.status(400).send({ message: 'couldnt get profile', status: false });
+        } else {
+            res.status(400).send({ message: 'couldnt get profile', status: 'okay', profileId: profiles[0]._id });
+        }
+    } catch (error) {
+        res.status(500).send({ message: 'Server error', error });
+    }
 
 }
 
@@ -314,5 +330,6 @@ module.exports = {
     removeRoleFromProfile,
     getUserDetails,
     updateUserInformation,
-    deleteUser
+    deleteUser,
+    getFirstProfile
 };
