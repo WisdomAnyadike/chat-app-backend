@@ -210,6 +210,7 @@ const addRoleToProfile = async (req, res) => {
             res.status(201).send({ message: 'Role added successfully', profile });
         } catch (error) {
             res.status(500).send({ message: 'Server error', error });
+            console.log(error);
         }
 
 
