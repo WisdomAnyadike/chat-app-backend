@@ -8,7 +8,7 @@ router.post('/login', login)
 router.get('/getUsers', getUsers)
 router.post('/createProfile', verifyToken, createProfile)
 router.get('/getFirstProfileId', verifyToken, getFirstProfile)
-router.post('/addRole:profileId', verifyToken, addRoleToProfile)
+router.post('/addRole/:profileId', verifyToken, addRoleToProfile)
 
 
 module.exports = router
