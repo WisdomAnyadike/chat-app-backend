@@ -179,7 +179,7 @@ const addRoleToProfile = async (req, res) => {
             // Find profile
             const profile = await Profile.findById(profileId);
             if (!profile) {
-                return res.status(404).send({ message: 'Profile not found' });
+                return res.status(404).send({ message: 'Profile not found' , status: false });
             }
 
 
@@ -195,7 +195,7 @@ const addRoleToProfile = async (req, res) => {
                 if (newDream) {
                     newDreamId = newDream._id;
                 } else {
-                    res.status(400).send({ message: 'couldnt create new dream' })
+                    res.status(400).send({ message: 'couldnt create new dream' , status:false})
                 }
 
             }
@@ -204,10 +204,12 @@ const addRoleToProfile = async (req, res) => {
             if (newDreamId) {
                 profile.role = { roleName, dreamId: newDreamId };
                 await user.save();
+
+                res.status(200).send({ message: 'Role added successfully', profile , status: 'okay' });
             }
 
 
-            res.status(201).send({ message: 'Role added successfully', profile });
+            
         } catch (error) {
             res.status(500).send({ message: 'Server error', error });
             console.log(error);
