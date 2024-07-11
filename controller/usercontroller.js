@@ -215,15 +215,11 @@ const addRoleToProfile = async (req, res) => {
 
             }
 
-
-
         } catch (error) {
+            console.log(error)
             return res.status(500).send({ message: 'Server error', error });
-            console.log(error);
+           
         }
-
-
-
     }
 
 };
@@ -254,58 +250,6 @@ const removeRoleFromProfile = async (req, res) => {
     }
 };
 
-const getUserDetails = async (req, res) => {
-    try {
-        const { userId } = req.params;
-
-        // Find user
-        const user = await userModel.findById(userId);
-        if (!user) {
-            return res.status(404).send({ message: 'User not found' });
-        }
-
-        res.status(200).send({ user });
-    } catch (error) {
-        res.status(500).send({ message: 'Server error', error });
-    }
-};
-
-const updateUserInformation = async (req, res) => {
-    try {
-        const { userId } = req.params;
-        const { name, email, password } = req.body;
-
-        // Find user
-        const user = await userModel.findById(userId);
-        if (!user) {
-            return res.status(404).send({ message: 'User not found' });
-        }
-
-        // Update user information
-        if (name) user.name = name;
-        if (email) user.email = email;
-        if (password) user.password = await bcrypt.hash(password, 10);
-
-        await user.save();
-
-        res.status(200).send({ message: 'User updated successfully', user });
-    } catch (error) {
-        res.status(500).send({ message: 'Server error', error });
-    }
-};
-
-const deleteUser = async (req, res) => {
-    try {
-        const { userId } = req.params;
-
-        // Find and delete user
-        await User.findByIdAndDelete(userId);
-
-        res.status(200).send({ message: 'User deleted successfully' });
-    } catch (error) {
-        res.status(500).send({ message: 'Server error', error });
-    }
-};
 
 
 const getFirstProfile = async (req, res) => {
@@ -320,7 +264,27 @@ const getFirstProfile = async (req, res) => {
         if (!profiles) {
             res.status(400).send({ message: 'couldnt get profile', status: false });
         } else {
-            res.status(200).send({ message: 'couldnt get profile', status: 'okay', profileId: profiles[0]._id });
+            res.status(200).send({ message: 'profile id fetched', status: 'okay', profileId: profiles[0]._id });
+        }
+    } catch (error) {
+        res.status(500).send({ message: 'Server error', error });
+    }
+
+}
+
+const getAllProfiles = async (req, res) => {
+    const { userId } = req.user
+    try {
+        const user = await userModel.findById(userId);
+        if (!user) {
+            return res.status(404).send({ message: 'User not found' });
+        }
+
+        const profiles = await Profile.find({ userId })
+        if (!profiles) {
+            res.status(400).send({ message: 'couldnt get profile', status: false });
+        } else {
+            res.status(200).send({ message: 'profile gotten successfully', status: 'okay', profiles });
         }
     } catch (error) {
         res.status(500).send({ message: 'Server error', error });
@@ -331,15 +295,11 @@ const getFirstProfile = async (req, res) => {
 
 
 
-
-
 module.exports = {
     signUp, login, getUsers,
     createProfile,
     addRoleToProfile,
     removeRoleFromProfile,
-    getUserDetails,
-    updateUserInformation,
-    deleteUser,
-    getFirstProfile
+    getFirstProfile,
+    getAllProfiles
 };
