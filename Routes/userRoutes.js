@@ -1,5 +1,5 @@
 const express = require('express')
-const { signUp, login, getUsers, createProfile, addRoleToProfile, getFirstProfile, getAllProfiles } = require('../controller/usercontroller')
+const { signUp, login, getUsers, createProfile, addRoleToProfile, getFirstProfile, getAllProfiles, getAllDreams } = require('../controller/usercontroller')
 const { verifyToken } = require('../middleware/verifyToken')
 const router = express.Router()
 
@@ -10,7 +10,7 @@ router.post('/createProfile', verifyToken, createProfile)
 router.get('/getFirstProfileId', verifyToken, getFirstProfile)
 router.post('/addRole/:profileId', verifyToken, addRoleToProfile)
 router.get('/getAllProfiles', verifyToken, getAllProfiles)
-
+router.get('/getAllDreams', verifyToken, getAllDreams)
 
 module.exports = router
 

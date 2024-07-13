@@ -195,7 +195,7 @@ const addRoleToProfile = async (req, res) => {
                 if (newDream) {
                     newDreamId = newDream._id;
                 } else {
-                    return  res.status(400).send({ message: 'couldnt create new dream', status: false })
+                    return res.status(400).send({ message: 'couldnt create new dream', status: false })
                 }
 
             }
@@ -203,14 +203,14 @@ const addRoleToProfile = async (req, res) => {
             // Add role to profile
             if (newDreamId) {
                 console.log('i happened');
-                const updateProfile = await Profile.findByIdAndUpdate( profileId , {
+                const updateProfile = await Profile.findByIdAndUpdate(profileId, {
                     role: { roleName, dreamId: newDreamId }
                 }, { new: true })
 
                 if (updateProfile) {
-                    return   res.status(200).send({ message: 'Role added successfully', updateProfile , status: 'okay' });
+                    return res.status(200).send({ message: 'Role added successfully', updateProfile, status: 'okay' });
                 } else {
-                    return  res.status(400).send({ message: 'couldnt update profile role', status: false })
+                    return res.status(400).send({ message: 'couldnt update profile role', status: false })
                 }
 
             }
@@ -218,7 +218,7 @@ const addRoleToProfile = async (req, res) => {
         } catch (error) {
             console.log(error)
             return res.status(500).send({ message: 'Server error', error });
-           
+
         }
     }
 
@@ -293,6 +293,29 @@ const getAllProfiles = async (req, res) => {
 }
 
 
+const getAllDreams = async (req, res) => {
+    const { userId } = req.user
+    try {
+        const user = await userModel.findById(userId);
+        if (!user) {
+            return res.status(404).send({ message: 'User not found' });
+        }
+
+        const dreams = await Dream.find()
+        if (!dreams) {
+            res.status(400).send({ message: 'couldnt get dreams', status: false });
+        } else {
+            res.status(200).send({ message: 'dreams gotten successfully', status: 'okay', dreams });
+        }
+    } catch (error) {
+        res.status(500).send({ message: 'Server error', error });
+    }
+
+}
+
+
+
+
 
 
 module.exports = {
@@ -301,5 +324,6 @@ module.exports = {
     addRoleToProfile,
     removeRoleFromProfile,
     getFirstProfile,
-    getAllProfiles
+    getAllProfiles,
+    getAllDreams
 };
