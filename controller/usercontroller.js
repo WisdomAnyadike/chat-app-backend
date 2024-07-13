@@ -165,9 +165,7 @@ const addRoleToProfile = async (req, res) => {
         res.status(400).send({ message: 'rolename is mandatory' })
     } else if (roleName === 'Concept Innovator' && (!dreamName || !description)) {
         res.status(400).send({ message: 'Innovator role requires dreamname & description' })
-    } else if (roleName !== 'Concept Innovator' && !dreamId) {
-        res.status(400).send({ message: 'Non-Innovator role requires dreamId' })
-    } else {
+    }else {
 
         try {
             // Find user
@@ -209,6 +207,18 @@ const addRoleToProfile = async (req, res) => {
 
                 if (updateProfile) {
                     return res.status(200).send({ message: 'Role added successfully', updateProfile, status: 'okay' });
+                } else {
+                    return res.status(400).send({ message: 'couldnt update profile role', status: false })
+                }
+
+            }else{
+                console.log('2nd happened');
+                const updateProfile = await Profile.findByIdAndUpdate(profileId, {
+                    role: { roleName, dreamId: null }
+                }, { new: true })
+
+                if (updateProfile) {
+                    return res.status(200).send({ message: 'Role add without dream id successfully', updateProfile, status: 'okay' });
                 } else {
                     return res.status(400).send({ message: 'couldnt update profile role', status: false })
                 }
