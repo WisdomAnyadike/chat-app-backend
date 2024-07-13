@@ -12,7 +12,7 @@ const dreamMemberSchema = new mongoose.Schema({
         required: true
     },
     role: {
-        type: String ,
+        type: String,
         required: true
     }
 });
@@ -28,7 +28,7 @@ const dreamSchema = new mongoose.Schema({
     },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'UserSchema',
         required: true
     },
     dreamMembers: {
