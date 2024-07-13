@@ -301,10 +301,12 @@ const getAllDreams = async (req, res) => {
             return res.status(404).send({ message: 'User not found' });
         }
 
-        const dreams = await Dream.find()
+        const dreams = await Dream.find().populate('createdBy', 'username');
         if (!dreams) {
             res.status(400).send({ message: 'couldnt get dreams', status: false });
         } else {
+             
+
             res.status(200).send({ message: 'dreams gotten successfully', status: 'okay', dreams });
         }
     } catch (error) {
