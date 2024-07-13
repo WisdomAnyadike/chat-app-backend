@@ -305,11 +305,10 @@ const getAllDreams = async (req, res) => {
         if (!dreams) {
             res.status(400).send({ message: 'couldnt get dreams', status: false });
         } else {
-             
-
             res.status(200).send({ message: 'dreams gotten successfully', status: 'okay', dreams });
         }
     } catch (error) {
+        console.log(error);
         res.status(500).send({ message: 'Server error', error });
     }
 
