@@ -203,7 +203,7 @@ const addRoleToProfile = async (req, res) => {
             if (newDreamId) {
                 console.log('i happened');
                 const updateProfile = await Profile.findByIdAndUpdate(profileId, {
-                    role: { roleName, dreamId: newDreamId }
+                    role: { roleName, dreamId: newDreamId, setRoleDescription: true }
                 }, { new: true })
 
                 if (updateProfile) {
@@ -377,11 +377,32 @@ const checkProfileTerms = async (req, res) => {
     }
 
     try {
-        // Find the specific profile by ID and check if setChooseProfile is true
+        // Find the specific profile by ID and check if setAcceptTerms is true
         const profile = await Profile.findOne({ _id: profileId, setAcceptTerms: true })
 
         if (!profile) {
             return res.status(404).send({ message: 'Profile not found or setAcceptTerms is not true', status: false });
+        }
+
+        res.status(200).send({ message: 'Profile retrieved successfully', status: true, profile });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ message: 'Server error', error });
+    }
+}
+
+const checkDescription = async (req, res) => {
+    const { profileId } = req.params;
+    if (!profileId) {
+        return res.status(400).send({ message: 'Profile ID is required' });
+    }
+
+    try {
+        // Find the specific profile by ID and check if setRoleDescription is true
+        const profile = await Profile.findOne({ _id: profileId, setRoleDescription: true })
+
+        if (!profile) {
+            return res.status(404).send({ message: 'Profile not found or setRoleDescription is not true', status: false });
         }
 
         res.status(200).send({ message: 'Profile retrieved successfully', status: true, profile });
@@ -401,7 +422,8 @@ module.exports = {
     getFirstProfile,
     getAllProfiles,
     getAllDreams,
-    getProfileWithChosenProfile , 
+    getProfileWithChosenProfile,
     setProfileTerms,
-    checkProfileTerms
+    checkProfileTerms,
+    checkDescription
 };
