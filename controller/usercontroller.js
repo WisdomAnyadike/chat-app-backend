@@ -412,6 +412,26 @@ const checkDescription = async (req, res) => {
     }
 }
 
+const getFirstProfileTerms = async (req, res) => {
+    const { userId } = req.user
+    try {
+        const user = await userModel.findById(userId);
+        if (!user) {
+            return res.status(404).send({ message: 'User not found' });
+        }
+
+        const profiles = await Profile.find({ userId })
+        if (!profiles) {
+            res.status(400).send({ message: 'couldnt get profile', status: false });
+        } else {
+            res.status(200).send({ message: 'profile details fetched', status: 'okay', AcceptTerms: profiles[0].setAcceptTerms, createProfile: profiles[0].setChooseProfile, roleDescription: profiles[0].setRoleDescription });
+        }
+    } catch (error) {
+        res.status(500).send({ message: 'Server error', error });
+    }
+
+}
+
 
 
 module.exports = {
@@ -425,5 +445,6 @@ module.exports = {
     getProfileWithChosenProfile,
     setProfileTerms,
     checkProfileTerms,
-    checkDescription
+    checkDescription,
+    getFirstProfileTerms
 };
