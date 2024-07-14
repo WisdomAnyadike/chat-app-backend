@@ -342,6 +342,7 @@ const getProfileWithChosenProfile = async (req, res) => {
 
         res.status(200).send({ message: 'Profile retrieved successfully', status: true, profile });
     } catch (error) {
+        console.log(error);
         res.status(500).send({ message: 'Server error', error });
     }
 };
@@ -358,6 +359,6 @@ module.exports = {
     removeRoleFromProfile,
     getFirstProfile,
     getAllProfiles,
-    getAllDreams ,
+    getAllDreams,
     getProfileWithChosenProfile
 };
