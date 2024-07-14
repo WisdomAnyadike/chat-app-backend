@@ -424,7 +424,7 @@ const getFirstProfileTerms = async (req, res) => {
         if (!profiles) {
             res.status(400).send({ message: 'couldnt get profile', status: false });
         } else {
-            res.status(200).send({ message: 'profile details fetched', status: 'okay', AcceptTerms: profiles[0].setAcceptTerms, createProfile: profiles[0].setChooseProfile, roleDescription: profiles[0].setRoleDescription });
+            res.status(200).send({ message: 'profile details fetched', status: 'okay', Profile : profiles[0] });
         }
     } catch (error) {
         res.status(500).send({ message: 'Server error', error });
