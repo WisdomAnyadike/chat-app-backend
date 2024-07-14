@@ -9,7 +9,19 @@ const profileSchema = new mongoose.Schema({
     profileName: {
         type: String,
         required: true,
-        unique:true
+        unique: true
+    },
+    setAcceptTerms: {
+        type: Boolean,
+        default: false
+    },
+    setChooseProfile: {
+        type: Boolean,
+        default: false
+    },
+    setRoleDescription: {
+        type: Boolean,
+        default: false
     },
     role: {
         roleName: {

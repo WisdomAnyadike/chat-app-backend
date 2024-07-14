@@ -124,7 +124,8 @@ const createProfile = async (req, res) => {
             if (!verifyProfile) {
                 const profile = await Profile.create({
                     userId,
-                    profileName
+                    profileName,
+                    setChooseProfile: true
                 })
 
                 // Add new profile
@@ -132,7 +133,7 @@ const createProfile = async (req, res) => {
                     user.profiles.push(profile._id);
                     await user.save();
 
-                    res.status(201).send({ message: 'Profile created successfully', profiles: user.profiles, status: 'okay' });
+                    res.status(201).send({ message: 'Profile created successfully', profileId: profile._id, status: 'okay' });
                 }
             } else {
                 res.status(400).send({ message: 'profile already exists' });
@@ -165,7 +166,7 @@ const addRoleToProfile = async (req, res) => {
         res.status(400).send({ message: 'rolename is mandatory' })
     } else if (roleName === 'Concept Innovator' && (!dreamName || !description)) {
         res.status(400).send({ message: 'Innovator role requires dreamname & description' })
-    }else {
+    } else {
 
         try {
             // Find user
@@ -211,7 +212,7 @@ const addRoleToProfile = async (req, res) => {
                     return res.status(400).send({ message: 'couldnt update profile role', status: false })
                 }
 
-            }else{
+            } else {
                 console.log('2nd happened');
                 const updateProfile = await Profile.findByIdAndUpdate(profileId, {
                     role: { roleName, dreamId: null }
@@ -325,6 +326,27 @@ const getAllDreams = async (req, res) => {
 }
 
 
+const getProfileWithChosenProfile = async (req, res) => {
+    const { profileId } = req.params;
+    if (!profileId) {
+        return res.status(400).send({ message: 'Profile ID is required' });
+    }
+
+    try {
+        // Find the specific profile by ID and check if setChooseProfile is true
+        const profile = await Profile.findOne({ _id: profileId, setChooseProfile: true }).populate('userId', 'username');
+
+        if (!profile) {
+            return res.status(404).send({ message: 'Profile not found or setChooseProfile is not true', status: false });
+        }
+
+        res.status(200).send({ message: 'Profile retrieved successfully', status: true, profile });
+    } catch (error) {
+        res.status(500).send({ message: 'Server error', error });
+    }
+};
+
+
 
 
 
@@ -336,5 +358,6 @@ module.exports = {
     removeRoleFromProfile,
     getFirstProfile,
     getAllProfiles,
-    getAllDreams
+    getAllDreams ,
+    getProfileWithChosenProfile
 };
