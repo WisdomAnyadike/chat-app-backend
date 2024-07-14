@@ -335,7 +335,7 @@ const getProfileWithChosenProfile = async (req, res) => {
     try {
         // Find the specific profile by ID and check if setChooseProfile is true
         const profile = await Profile.findOne({ _id: profileId, setChooseProfile: true })
-        
+
         if (!profile) {
             return res.status(404).send({ message: 'Profile not found or setChooseProfile is not true', status: false });
         }
@@ -345,10 +345,51 @@ const getProfileWithChosenProfile = async (req, res) => {
         console.log(error);
         res.status(500).send({ message: 'Server error', error });
     }
-};
+}
 
 
+const setProfileTerms = async (req, res) => {
+    const { profileId } = req.params;
+    if (!profileId) {
+        return res.status(400).send({ message: 'Profile ID is required' });
+    }
 
+    try {
+        // Find the specific profile by ID and check if setChooseProfile is true
+        const profile = await Profile.findOneAndUpdate({ _id: profileId }, { setAcceptTerms: true }, { new: true })
+
+        if (!profile) {
+            return res.status(404).send({ message: 'couldnt accept terms', status: false });
+        }
+
+        res.status(200).send({ message: 'Terms accepted successfully', status: true, profile });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ message: 'Server error', error });
+    }
+}
+
+
+const checkProfileTerms = async (req, res) => {
+    const { profileId } = req.params;
+    if (!profileId) {
+        return res.status(400).send({ message: 'Profile ID is required' });
+    }
+
+    try {
+        // Find the specific profile by ID and check if setChooseProfile is true
+        const profile = await Profile.findOne({ _id: profileId, setAcceptTerms: true })
+
+        if (!profile) {
+            return res.status(404).send({ message: 'Profile not found or setAcceptTerms is not true', status: false });
+        }
+
+        res.status(200).send({ message: 'Profile retrieved successfully', status: true, profile });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ message: 'Server error', error });
+    }
+}
 
 
 
@@ -360,5 +401,7 @@ module.exports = {
     getFirstProfile,
     getAllProfiles,
     getAllDreams,
-    getProfileWithChosenProfile
+    getProfileWithChosenProfile , 
+    setProfileTerms,
+    checkProfileTerms
 };
