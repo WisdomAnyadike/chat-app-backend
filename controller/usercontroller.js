@@ -349,14 +349,15 @@ const getProfileWithChosenProfile = async (req, res) => {
 
 
 const setProfileTerms = async (req, res) => {
-    const { profileId } = req.params;
+    const { profileId, role } = req.params
+
     if (!profileId) {
         return res.status(400).send({ message: 'Profile ID is required' });
     }
 
     try {
         // Find the specific profile by ID and check if setChooseProfile is true
-        const profile = await Profile.findOneAndUpdate({ _id: profileId }, { setAcceptTerms: true }, { new: true })
+        const profile = await Profile.findOneAndUpdate({ _id: profileId }, { setAcceptTerms: true, 'role.roleName': role }, { new: true })
 
         if (!profile) {
             return res.status(404).send({ message: 'couldnt accept terms', status: false });
@@ -424,7 +425,7 @@ const getFirstProfileTerms = async (req, res) => {
         if (!profiles) {
             res.status(400).send({ message: 'couldnt get profile', status: false });
         } else {
-            res.status(200).send({ message: 'profile details fetched', status: 'okay', Profile : profiles[0] });
+            res.status(200).send({ message: 'profile details fetched', status: 'okay', Profile: profiles[0] });
         }
     } catch (error) {
         res.status(500).send({ message: 'Server error', error });
