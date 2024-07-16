@@ -437,14 +437,14 @@ const getFirstProfileTerms = async (req, res) => {
 const getProfile = async (req, res) => {
     const { profileId } = req.params
     if (!profileId) {
-        res.status(400).send({ message: 'profile id is not provided' })
+        res.status(400).send({ message: 'profile id is not provided' , status: false })
     } else {
         try {
             const profile = await Profile.find({ profileId })
             if (profile) {
-                res.status(200).send({ message: 'profile gotten successfully', profile })
+                res.status(200).send({ message: 'profile gotten successfully', profile, status: 'okay' })
             } else {
-                res.status(404).send({ message: 'couldnt find profile' })
+                res.status(404).send({ message: 'couldnt find profile', status: false })
             }
 
         } catch (error) {
@@ -467,6 +467,6 @@ module.exports = {
     setProfileTerms,
     checkProfileTerms,
     checkDescription,
-    getFirstProfileTerms ,
+    getFirstProfileTerms,
     getProfile
 };
