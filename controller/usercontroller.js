@@ -434,6 +434,26 @@ const getFirstProfileTerms = async (req, res) => {
 }
 
 
+const getProfile = async (req, res) => {
+    const { profileId } = req.params
+    if (!profileId) {
+        res.status(400).send({ message: 'profile id is not provided' })
+    } else {
+        try {
+            const profile = await Profile.find({ profileId })
+            if (profile) {
+                res.status(200).send({ message: 'profile gotten successfully', profile })
+            } else {
+                res.status(404).send({ message: 'couldnt find profile' })
+            }
+
+        } catch (error) {
+            res.status(500).send({ message: 'Server error', error });
+        }
+    }
+}
+
+
 
 module.exports = {
     signUp, login, getUsers,
@@ -447,5 +467,6 @@ module.exports = {
     setProfileTerms,
     checkProfileTerms,
     checkDescription,
-    getFirstProfileTerms
+    getFirstProfileTerms ,
+    getProfile
 };
