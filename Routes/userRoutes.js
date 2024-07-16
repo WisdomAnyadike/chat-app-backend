@@ -16,7 +16,7 @@ router.get('/setTerms/:profileId/:role', setProfileTerms)
 router.get('/checkTerms/:profileId', checkProfileTerms)
 router.get('/checkDescription/:profileId', checkDescription)
 router.get('/getFirstProfile', verifyToken, getFirstProfileTerms)
-router.get('/getProfile:profileId', verifyToken, getProfile)
+router.get('/getProfile/:profileId', verifyToken, getProfile)
 
 module.exports = router
 
