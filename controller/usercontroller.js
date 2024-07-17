@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs')
 const JWT = require('jsonwebtoken')
 const Dream = require("../models/dreamModel")
 const Profile = require("../models/profileModel")
+import { cloudinary } from "../config/cloudinary"
 
 
 const signUp = async (req, res) => {
@@ -460,8 +461,8 @@ const uploadProfileDetails = async (req, res) => {
     if (!profileId) {
         res.status(400).send({ message: 'profile id is not provided', status: false })
     } else {
-        const { profileName , portfolioUrl, cvUrl, coverLetter } = req.body
-        if ( !profileName || !portfolioUrl || !cvUrl || !coverLetter) {
+        const { profileName, portfolioUrl, cvUrl, coverLetter } = req.body
+        if (!profileName || !portfolioUrl || !cvUrl || !coverLetter) {
             res.status(400).send({ message: 'all fields are mandatory', status: false })
         } else {
             try {
