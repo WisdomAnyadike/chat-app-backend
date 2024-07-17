@@ -23,6 +23,9 @@ const profileSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    portfolioUrl: { type: String },
+    coverLetter: { type: String },
+    cvUrl: { type: String },
     role: {
         roleName: {
             type: String,

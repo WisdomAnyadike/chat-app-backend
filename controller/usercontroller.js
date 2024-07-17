@@ -437,7 +437,7 @@ const getFirstProfileTerms = async (req, res) => {
 const getProfile = async (req, res) => {
     const { profileId } = req.params
     if (!profileId) {
-        res.status(400).send({ message: 'profile id is not provided' , status: false })
+        res.status(400).send({ message: 'profile id is not provided', status: false })
     } else {
         try {
             const profile = await Profile.find({ _id: profileId })
@@ -450,6 +450,36 @@ const getProfile = async (req, res) => {
         } catch (error) {
             res.status(500).send({ message: 'Server error', error });
         }
+    }
+}
+
+
+const uploadProfileDetails = async (req, res) => {
+    const { profileId } = req.params
+
+    if (!profileId) {
+        res.status(400).send({ message: 'profile id is not provided', status: false })
+    } else {
+        const { portfolioUrl, cvUrl, coverLetter } = req.body
+        if (!portfolioUrl || !cvUrl || !coverLetter) {
+            res.status(400).send({ message: 'all fields are mandatory', status: false })
+        } else {
+            try {
+                const cvUrlUpload = await cloudinary.uploader.upload(cvUrl, { folder: 'cv pdf' })
+                const cvLink = imageUpload.secure_url
+                const profile = await Profile.findOneAndUpdate({ _id: profileId }, { cvUrl: cvLink, portfolioUrl, coverLetter }, { new: true })
+                if (profile) {
+                    res.status(200).send({ message: 'profile updated successfully', profile, status: 'okay' })
+                } else {
+                    res.status(404).send({ message: 'couldnt find profile to upload', status: false })
+                }
+
+            } catch (error) {
+                res.status(500).send({ message: 'Server error', error });
+            }
+
+        }
+
     }
 }
 
@@ -468,5 +498,6 @@ module.exports = {
     checkProfileTerms,
     checkDescription,
     getFirstProfileTerms,
-    getProfile
+    getProfile,
+    uploadProfileDetails
 };
