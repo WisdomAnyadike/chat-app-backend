@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs')
 const JWT = require('jsonwebtoken')
 const Dream = require("../models/dreamModel")
 const Profile = require("../models/profileModel")
-import { cloudinary } from "../config/cloudinary"
+const { cloudinary } = require("../config/cloudinary")
 
 
 const signUp = async (req, res) => {
