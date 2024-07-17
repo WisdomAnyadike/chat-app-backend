@@ -460,13 +460,13 @@ const uploadProfileDetails = async (req, res) => {
     if (!profileId) {
         res.status(400).send({ message: 'profile id is not provided', status: false })
     } else {
-        const { portfolioUrl, cvUrl, coverLetter } = req.body
-        if (!portfolioUrl || !cvUrl || !coverLetter) {
+        const { profileName , portfolioUrl, cvUrl, coverLetter } = req.body
+        if ( !profileName || !portfolioUrl || !cvUrl || !coverLetter) {
             res.status(400).send({ message: 'all fields are mandatory', status: false })
         } else {
             try {
                 const cvUrlUpload = await cloudinary.uploader.upload(cvUrl, { folder: 'cv pdf' })
-                const cvLink = imageUpload.secure_url
+                const cvLink = cvUrlUpload.secure_url
                 const profile = await Profile.findOneAndUpdate({ _id: profileId }, { cvUrl: cvLink, portfolioUrl, coverLetter }, { new: true })
                 if (profile) {
                     res.status(200).send({ message: 'profile updated successfully', profile, status: 'okay' })
@@ -475,6 +475,7 @@ const uploadProfileDetails = async (req, res) => {
                 }
 
             } catch (error) {
+                console.log(error);
                 res.status(500).send({ message: 'Server error', error });
             }
 
