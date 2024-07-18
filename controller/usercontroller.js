@@ -442,7 +442,7 @@ const getProfile = async (req, res) => {
         res.status(400).send({ message: 'profile id is not provided', status: false })
     } else {
         try {
-            const profile = await Profile.find({ _id: profileId })
+            const profile = await Profile.findOne({ _id: profileId })
             if (profile) {
                 res.status(200).send({ message: 'profile gotten successfully', profile, status: 'okay' })
             } else {
