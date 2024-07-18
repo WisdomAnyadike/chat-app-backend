@@ -4,6 +4,7 @@ const JWT = require('jsonwebtoken')
 const Dream = require("../models/dreamModel")
 const Profile = require("../models/profileModel")
 const { cloudinary } = require("../config/cloudinary")
+const applyModel = require("../models/applyModel")
 
 
 const signUp = async (req, res) => {
@@ -486,6 +487,35 @@ const uploadProfileDetails = async (req, res) => {
 }
 
 
+const applyToDream = async (req, res) => {
+    const { dreamId, portfolioUrl, coverLetter, cvUrl, userId, profileId } = req.body
+    if (!dreamId || !cvUrl || !userId || !profileId) {
+        res.status(400).send({ message: "a required field was not sent", status: false })
+    } else {
+        try {
+            const verifyProfile = await applyModel.findOne({ profileId, dreamId })
+            if (verifyProfile) {
+                res.status(400).send({ message: "you already have a pending application", status: false })
+            } else {
+                const createApplication = await applyModel.create({
+                    dreamId, portfolioUrl: null || portfolioUrl, coverLetter: null || coverLetter, cvUrl, userId, profileId
+                })
+                if (createApplication) {
+                    res.status(200).send({ message: "application successful", status: 'okay' })
+                } else {
+                    res.status(400).send({ message: "couldnt apply to this dream", status: false })
+                }
+            }
+
+        } catch (error) {
+            console.log(error);
+            res.status(500).send({ message: 'Server error', error });
+        }
+    }
+
+}
+
+
 
 module.exports = {
     signUp, login, getUsers,
@@ -501,5 +531,6 @@ module.exports = {
     checkDescription,
     getFirstProfileTerms,
     getProfile,
-    uploadProfileDetails
+    uploadProfileDetails ,
+    applyToDream
 };

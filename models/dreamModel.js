@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const dreamMemberSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'UserSchema',
         required: true
     },
     profileId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User.profiles',
+        ref: 'Profile',
         required: true
     },
     role: {
