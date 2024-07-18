@@ -26,6 +26,10 @@ const profileSchema = new mongoose.Schema({
     portfolioUrl: { type: String },
     coverLetter: { type: String },
     cvUrl: { type: String },
+    isProfileSet: {
+        type: Boolean,
+        default: false
+    },
     role: {
         roleName: {
             type: String,

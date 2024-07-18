@@ -469,7 +469,7 @@ const uploadProfileDetails = async (req, res) => {
             try {
                 const cvUrlUpload = await cloudinary.uploader.upload(cvUrl, { folder: 'cv pdf' })
                 const cvLink = cvUrlUpload.secure_url
-                const profile = await Profile.findOneAndUpdate({ _id: profileId }, { cvUrl: cvLink, portfolioUrl, coverLetter }, { new: true })
+                const profile = await Profile.findOneAndUpdate({ _id: profileId }, { cvUrl: cvLink, portfolioUrl, coverLetter, isProfileSet: true }, { new: true })
                 if (profile) {
                     res.status(200).send({ message: 'profile updated successfully', profile, status: 'okay' })
                 } else {
@@ -531,6 +531,6 @@ module.exports = {
     checkDescription,
     getFirstProfileTerms,
     getProfile,
-    uploadProfileDetails ,
+    uploadProfileDetails,
     applyToDream
 };
