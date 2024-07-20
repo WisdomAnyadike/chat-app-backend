@@ -205,7 +205,7 @@ const addRoleToProfile = async (req, res) => {
             if (newDreamId) {
                 console.log('i happened');
                 const updateProfile = await Profile.findByIdAndUpdate(profileId, {
-                    role: { roleName, dreamId: newDreamId, setRoleDescription: true }
+                    role: { roleName, dreamId: newDreamId} , setRoleDescription: true
                 }, { new: true })
 
                 if (updateProfile) {
