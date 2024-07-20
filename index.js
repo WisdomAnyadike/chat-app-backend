@@ -9,6 +9,7 @@ const router = require('./Routes/userRoutes');
 const { createChat, removeUser, getUser } = require('./config/helper');
 const roomModel = require('./models/roomModel');
 const router2 = require('./Routes/roomRoutes');
+const applyRouter = require('./Routes/applyRoutes');
 const io = socketio(http);
 
 const port = process.env.PORT || 4000;
@@ -16,6 +17,7 @@ const port = process.env.PORT || 4000;
 app.use(express.json({ extended: true, limit: '500mb' }));
 app.use(cors({ origin: '*' }));
 app.use('/api/user', router);
+app.use('/api/apply', applyRouter);
 app.use('/api/chatroom', router2);
 
 io.on('connection', (socket) => {
