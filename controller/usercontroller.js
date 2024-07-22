@@ -26,9 +26,9 @@ const signUp = async (req, res) => {
             })
 
             if (createUser) {
-                res.status(200).send({ message: "user created successfully" })
+                res.status(200).send({ message: "user created successfully", status: 'okay', user: createUser })
             } else {
-                res.status(400).send({ message: "couldnt created user successfully" })
+                res.status(400).send({ message: "couldnt created user successfully", status: false })
             }
 
 
@@ -205,7 +205,7 @@ const addRoleToProfile = async (req, res) => {
             if (newDreamId) {
                 console.log('i happened');
                 const updateProfile = await Profile.findByIdAndUpdate(profileId, {
-                    role: { roleName, dreamId: newDreamId} , setRoleDescription: true
+                    role: { roleName, dreamId: newDreamId }, setRoleDescription: true
                 }, { new: true })
 
                 if (updateProfile) {
