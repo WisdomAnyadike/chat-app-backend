@@ -19,10 +19,37 @@ const fetchAllapplications = async (req, res) => {
                 res.status(400).send({ message: 'couldnt fetch applications', status: false })
             }
         } catch (error) {
+            console.log(error);
+            res.status(500).send({ message: 'Server error', error });
+        }
+    }
+
+}
+
+
+const fetchApplication = async (req, res) => {
+    const user = req.user
+    const { id } = req.params
+    if (!user) {
+        res.status(400).send({ message: 'no authentication provided', status: false })
+    } else {
+        try {
+            const application = await applyModel.findById(id).populate('userId', 'username').populate({
+                path: 'profileId',
+                select: 'role.roleName'
+            })
+            if (application) {
+                res.status(200).send({ message: 'application fetched successfully', status: 'okay', application })
+            } else {
+                res.status(400).send({ message: 'couldnt fetch applications', status: false })
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(500).send({ message: 'Server error', error });
 
         }
     }
 
 }
 
-module.exports = { fetchAllapplications }
+module.exports = { fetchAllapplications, fetchApplication }
