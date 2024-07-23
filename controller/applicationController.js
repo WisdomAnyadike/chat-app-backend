@@ -7,7 +7,10 @@ const fetchAllapplications = async (req, res) => {
         res.status(400).send({ message: 'no authentication provided', status: false })
     } else {
         try {
-            const applications = await applyModel.find({ dreamId })
+            const applications = await applyModel.find({ dreamId }).populate('userId', 'username').populate({
+                path: 'profileId',
+                select: 'role.roleName'
+            })
             if (applications && applications.length !== 0) {
                 res.status(200).send({ message: 'application fetched successfully', status: 'okay', applications })
             } else if (applications.length == 0) {
