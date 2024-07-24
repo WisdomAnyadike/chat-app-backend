@@ -7,6 +7,6 @@ const applyRouter = express.Router()
 applyRouter.post('/getapplications', verifyToken, fetchAllapplications)
 applyRouter.get('/getapplications/:id', verifyToken, fetchApplication)
 applyRouter.post('/acceptApplication', verifyToken, acceptProfile)
-applyRouter.post('/getTeam/:dreamId', verifyToken, getTeamMembers)
+applyRouter.get('/getTeam/:dreamId', verifyToken, getTeamMembers)
 
 module.exports = applyRouter
