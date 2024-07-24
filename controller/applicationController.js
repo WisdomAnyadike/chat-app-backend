@@ -121,13 +121,13 @@ const getTeamMembers = async (req, res) => {
     try {
         const dream = await Dream.findById(dreamId).populate({
             path: 'dreamMembers.userId',
-            select: 'userName'
+            select: 'username'
         })
         if (!dream) {
             return res.status(404).send({ message: 'dream not found' });
         }
 
-        return res.status(200).send({ message: 'user accepted successfully', status: "okay", dreamMembers: dream.dreamMembers });
+        return res.status(200).send({ message: 'dreammembers gotten successfully', status: "okay", dreamMembers: dream.dreamMembers });
 
     } catch (error) {
         console.error(error);
