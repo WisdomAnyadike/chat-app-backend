@@ -86,7 +86,7 @@ const acceptProfile = async (req, res) => {
         if (!updatedDream) {
             return res.status(400).send({ message: 'an error occurred while adding user to dream', status: false });
         }
-        
+
         const thatProfile = await Profile.findOne({ _id: profileId, isAccepted: true })
         if (thatProfile) {
             return res.status(400).send({ message: 'application already accepted', status: false });
@@ -111,5 +111,27 @@ const acceptProfile = async (req, res) => {
     }
 };
 
+const getTeamMembers = async (req, res) => {
+    const user = req.user;
+    const { dreamId } = req.params;
+    if (!user) {
+        return res.status(400).send({ message: 'authorisation not provided' });
+    }
 
-module.exports = { fetchAllapplications, fetchApplication, acceptProfile }
+    try {
+        const dream = await Dream.findById(dreamId).populate
+        if (!dream) {
+            return res.status(404).send({ message: 'dream not found' });
+        }
+
+        return res.status(200).send({ message: 'user accepted successfully', status: "okay", dreamMembers: dream.dreamMembers });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({ message: 'Server error', error });
+    }
+
+}
+
+
+module.exports = { fetchAllapplications, fetchApplication, acceptProfile, getTeamMembers }
