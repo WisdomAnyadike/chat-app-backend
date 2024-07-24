@@ -86,6 +86,11 @@ const acceptProfile = async (req, res) => {
         if (!updatedDream) {
             return res.status(400).send({ message: 'an error occurred while adding user to dream', status: false });
         }
+        
+        const thatProfile = await Profile.findOne({ _id: profileId, isAccepted: true })
+        if (thatProfile) {
+            return res.status(400).send({ message: 'application already accepted', status: false });
+        }
 
         const userProfile = await Profile.findByIdAndUpdate(profileId, { isAccepted: true }, { new: true });
 
