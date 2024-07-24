@@ -16,6 +16,10 @@ const applySchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    isAccepted: {
+        type: Boolean,
+        default: false
+    },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'UserSchema',

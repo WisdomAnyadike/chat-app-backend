@@ -30,6 +30,11 @@ const profileSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    isAccepted: {
+        type: Boolean,
+        default: false
+    }
+    ,
     role: {
         roleName: {
             type: String,
