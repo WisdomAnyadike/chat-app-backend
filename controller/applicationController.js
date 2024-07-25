@@ -92,7 +92,7 @@ const acceptProfile = async (req, res) => {
             return res.status(400).send({ message: 'application already accepted', status: false });
         }
 
-        const userProfile = await Profile.findByIdAndUpdate(profileId, { isAccepted: true }, { new: true });
+        const userProfile = await Profile.findByIdAndUpdate(profileId, { isAccepted: true, 'role.dreamId': dreamId }, { new: true });
 
         const applications = await applyModel.find({ profileId });
         for (const app of applications) {
