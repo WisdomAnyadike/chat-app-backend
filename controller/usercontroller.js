@@ -191,9 +191,17 @@ const addRoleToProfile = async (req, res) => {
                 const newDream = await Dream.create({
                     dreamName,
                     description,
-                    createdBy: userId
-                });
+                    createdBy: userId,
+
+                }
+                );
                 if (newDream) {
+                    newDream.dreamMembers.push({
+                        userId,
+                        profileId,
+                        role: 'Concept Innovator'
+                    })
+                    await newDream.save()
                     newDreamId = newDream._id;
                 } else {
                     return res.status(400).send({ message: 'couldnt create new dream', status: false })
