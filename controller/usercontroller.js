@@ -525,6 +525,17 @@ const applyToDream = async (req, res) => {
 
 
 
+const getCurrentUser = async (req, res) => {
+    const user = req.user
+    if (!user) {
+        res.status(400).send({ message: 'no authentication provided', status: false })
+    } else {
+        res.status(200).send({ message: "user gotten successful", status: 'okay', user })
+    }
+}
+
+
+
 
 
 
@@ -543,5 +554,6 @@ module.exports = {
     getFirstProfileTerms,
     getProfile,
     uploadProfileDetails,
-    applyToDream
+    applyToDream,
+    getCurrentUser
 };
