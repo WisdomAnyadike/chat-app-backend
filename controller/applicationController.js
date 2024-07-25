@@ -122,6 +122,9 @@ const getTeamMembers = async (req, res) => {
         const dream = await Dream.findById(dreamId).populate({
             path: 'dreamMembers.userId',
             select: 'username'
+        }).populate({
+            path: 'dreamMembers.userId',
+            select: 'email'
         })
         if (!dream) {
             return res.status(404).send({ message: 'dream not found' });
