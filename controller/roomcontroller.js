@@ -35,13 +35,19 @@ const getRoomId = async (req, res) => {
         try {
             const objWithID = await roomModel.findOne({ name, user_texted })
             if (objWithID) {
-                res.status(200).send({ message: "room id gotten successfully", room_id: objWithID.room_id  , status: 'okay'})
+                res.status(200).send({ message: "room id gotten successfully", room_id: objWithID.room_id, status: 'okay' })
             } else {
-                res.status(200).send({ message: "couldnt get room id"  , status: 'notokay' , room_id : null})
+                const myFormerID = await roomModel.findOne({ name:user_texted,  user_texted: name })
+                if (myFormerID) {
+                    res.status(200).send({ message: "room id gotten successfully", room_id: myFormerID.room_id, status: 'okay' })
+                } else {
+                    res.status(200).send({ message: "couldnt get room id", status: 'notokay', room_id: null })
+                }
+
             }
         } catch (error) {
             console.log('error while fetching roomid', error);
-            res.status(500).send({ message: "internal server error"  , status: false })
+            res.status(500).send({ message: "internal server error", status: false })
         }
 
     }
@@ -51,4 +57,4 @@ const getRoomId = async (req, res) => {
 }
 
 
-module.exports = { getRooms , getRoomId}
+module.exports = { getRooms, getRoomId }
