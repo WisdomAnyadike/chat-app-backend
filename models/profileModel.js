@@ -19,6 +19,10 @@ const profileSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    ChooseWorker: {
+        type: Boolean,
+        default: false
+    },
     setRoleDescription: {
         type: Boolean,
         default: false
@@ -38,7 +42,7 @@ const profileSchema = new mongoose.Schema({
     role: {
         roleName: {
             type: String,
-            enum: ['Concept Innovator', 'Frontend Developer', 'Backend Developer', 'Product Manager', 'UI/UX Designer', 'Data Scientist', 'QA Engineer', 'Marketing Specialist']
+            enum: ['Concept Innovator', 'Investor' , 'Frontend Developer', 'Backend Developer', 'Product Manager', 'UI/UX Designer', 'Data Scientist', 'QA Engineer', 'Marketing Specialist']
         },
         dreamId: {
             type: mongoose.Schema.Types.ObjectId,
@@ -54,10 +58,3 @@ module.exports = Profile;
 
 
 
-// function rolesLimit(val) {
-//     const roleCount = val.reduce((acc, role) => {
-//         acc[role.ideaId] = (acc[role.ideaId] || 0) + 1;
-//         return acc;
-//     }, {});
-//     return !Object.values(roleCount).some(count => count > 2);
-// }
