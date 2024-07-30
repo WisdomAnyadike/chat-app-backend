@@ -380,6 +380,28 @@ const setProfileTerms = async (req, res) => {
     }
 }
 
+const setWorkerTerms = async (req, res) => {
+    const { profileId} = req.params
+
+    if (!profileId) {
+        return res.status(400).send({ message: 'Profile ID is required' });
+    }
+
+    try {
+        // Find the specific profile by ID and check if setChooseProfile is true
+        const profile = await Profile.findOneAndUpdate({ _id: profileId }, { chooseWorker: true}, { new: true })
+
+        if (!profile) {
+            return res.status(404).send({ message: 'couldnt accept worker', status: false });
+        }
+
+        res.status(200).send({ message: 'worker accepted successfully', status: true, profile });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ message: 'Server error', error });
+    }
+}
+
 
 const checkProfileTerms = async (req, res) => {
     const { profileId } = req.params;
@@ -530,7 +552,7 @@ const getCurrentUser = async (req, res) => {
     if (!user) {
         res.status(400).send({ message: 'no authentication provided', status: false })
     } else {
-        
+
         res.status(200).send({ message: "user gotten successful", status: 'okay', user })
     }
 }
@@ -556,5 +578,6 @@ module.exports = {
     getProfile,
     uploadProfileDetails,
     applyToDream,
-    getCurrentUser
+    getCurrentUser ,
+    setWorkerTerms
 };
