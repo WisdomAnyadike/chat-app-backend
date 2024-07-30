@@ -389,7 +389,7 @@ const setWorkerTerms = async (req, res) => {
 
     try {
         // Find the specific profile by ID and check if setChooseProfile is true
-        const profile = await Profile.findOneAndUpdate({ _id: profileId }, { setAcceptTerms: true,  ChooseWorker: true , 'role.roleName': undefined }, { new: true })
+        const profile = await Profile.findOneAndUpdate({ _id: profileId }, { setAcceptTerms: true,  ChooseWorker: true , 'role.roleName': null }, { new: true })
 
         if (!profile) {
             return res.status(404).send({ message: 'couldnt accept worker', status: false });
